@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de compras - Arte e Gourmet</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #fafafa;
+        }
+        .cart-page-header {
+            background: #d72660;
+            color: #fff;
+            padding: 2rem 0 1.2rem 0;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .cart-main {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 2.5rem auto;
+            align-items: flex-start;
+        }
+        .cart-list-section {
+            flex: 2;
+        }
+        .cart-list-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #222;
+        }
+        .cart-table-header {
+            display: flex;
+            color: #888;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            padding-left: 1.5rem;
+        }
+        .cart-table-header > div {
+            flex: 1;
+        }
+        .cart-table-header .cart-th-produto { flex: 2; }
+        .cart-table-header .cart-th-preco,
+        .cart-table-header .cart-th-quantidade,
+        .cart-table-header .cart-th-total { text-align: center; }
+        .cart-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .cart-item {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #0001;
+            display: flex;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            gap: 1.2rem;
+            font-size: 1.1rem;
+        }
+        .cart-item-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: #f3f3f3;
+        }
+        .cart-item-info {
+            flex: 2;
+        }
+        .cart-item-info .cart-item-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .cart-item-info .cart-item-desc {
+            color: #888;
+            font-size: 0.98rem;
+        }
+        .cart-item-price, .cart-item-total {
+            flex: 1;
+            text-align: center;
+            font-weight: 600;
+        }
+        .cart-item-qty {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .cart-item-qty-btn {
+            background: #eee;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #222;
+            transition: background 0.2s;
+        }
+        .cart-item-qty-btn:hover {
+            background: #d72660;
+            color: #fff;
+        }
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #d72660;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+        .cart-summary-section {
+            flex: 1;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #0001;
+            padding: 2rem 2rem 1.5rem 2rem;
+            min-width: 320px;
+        }
+        .cart-summary-section h3 {
+            margin-top: 0;
+            font-size: 1.4rem;
+            color: #222;
+        }
+        .cart-summary-table {
+            width: 100%;
+            margin-bottom: 1.2rem;
+        }
+        .cart-summary-table td {
+            padding: 0.4rem 0;
+            font-size: 1.08rem;
+        }
+        .cart-summary-table .cart-summary-total {
+            font-weight: bold;
+            font-size: 1.15rem;
+            color: #111;
+        }
+        .cart-summary-table .cart-summary-label {
+            color: #888;
+        }
+        .cart-summary-btn {
+            width: 100%;
+            background: #16c43b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 0.9rem 0;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background 0.2s;
+        }
+        .cart-summary-btn:hover {
+            background: #0e9c2f;
+        }
+        @media (max-width: 900px) {
+            .cart-main {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .cart-summary-section {
+                margin-top: 2rem;
+                min-width: unset;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-page-header">Carrinho de compras Arte e Gourmet</div>
+    <div class="cart-main">
+        <section class="cart-list-section">
+            <h2>Seu Carrinho</h2>
+            <div class="cart-table-header">
+                <div class="cart-th-produto">PRODUTO</div>
+                <div class="cart-th-preco">PREÇO</div>
+                <div class="cart-th-quantidade">QUANTIDADE</div>
+                <div class="cart-th-total">TOTAL</div>
+            </div>
+            <div class="cart-list" id="cart-list"></div>
+        </section>
+        <aside class="cart-summary-section">
+            <h3>Resumo da compra</h3>
+            <table class="cart-summary-table">
+                <tr>
+                    <td class="cart-summary-label">Sub-total</td>
+                    <td id="cart-subtotal" style="text-align:right">R$ 0,00</td>
+                </tr>
+                <tr>
+                    <td class="cart-summary-label">Frete</td>
+                    <td style="text-align:right">Gratuito</td>
+                </tr>
+                <tr><td colspan="2"><hr></td></tr>
+                <tr>
+                    <td class="cart-summary-label cart-summary-total">Total</td>
+                    <td class="cart-summary-total" id="cart-total">R$ 0,00</td>
+                </tr>
+            </table>
+            <button class="cart-summary-btn" onclick="finalizarCompra()">FINALIZAR COMPRA</button>
+        </aside>
+    </div>
+    <script src="produtos.js"></script>
+    <script>
+        // Carrinho salvo no localStorage
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function renderCart() {
+            const cartList = document.getElementById('cart-list');
+            cartList.innerHTML = '';
+            let subtotal = 0;
+            if (cart.length === 0) {
+                cartList.innerHTML = '<div style="text-align:center;color:#888;padding:2rem 0;">Seu carrinho está vazio.</div>';
+            } else {
+                cart.forEach(item => {
+                    const prod = products.find(p => p.id === item.id);
+                    if (!prod) return;
+                    const totalItem = prod.price * item.qty;
+                    subtotal += totalItem;
+                    const div = document.createElement('div');
+                    div.className = 'cart-item';
+                    div.innerHTML = `
+                        <img class="cart-item-img" src="${prod.img}" alt="${prod.name}">
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${prod.name}</div>
+                            <div class="cart-item-desc">${prod.desc}</div>
+                        </div>
+                        <div class="cart-item-price">R$ ${prod.price.toFixed(2)}</div>
+                        <div class="cart-item-qty">
+                            <button class="cart-item-qty-btn" onclick="changeQty(${prod.id}, -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="cart-item-qty-btn" onclick="changeQty(${prod.id}, 1)">+</button>
+                        </div>
+                        <div class="cart-item-total">R$ ${totalItem.toFixed(2)}</div>
+                        <button class="cart-item-remove" onclick="removeFromCart(${prod.id})">&times;</button>
+                    `;
+                    cartList.appendChild(div);
+                });
+            }
+            document.getElementById('cart-subtotal').textContent = 'R$ ' + subtotal.toFixed(2);
+            document.getElementById('cart-total').textContent = 'R$ ' + subtotal.toFixed(2);
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    cart = cart.filter(i => i.id !== id);
+                }
+                saveCart();
+                renderCart();
+            }
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(i => i.id !== id);
+            saveCart();
+            renderCart();
+        }
+
+        function finalizarCompra() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+            let msg = 'Pedido Arte e Gourmet:%0A';
+            cart.forEach(item => {
+                const prod = products.find(p => p.id === item.id);
+                if (prod) {
+                    msg += `${item.qty}x ${prod.name} (R$ ${(prod.price * item.qty).toFixed(2)})%0A`;
+                }
+            });
+            const total = cart.reduce((sum, i) => {
+                const prod = products.find(p => p.id === i.id);
+                return sum + (prod ? prod.price * i.qty : 0);
+            }, 0);
+            msg += `Total: R$ ${total.toFixed(2)}`;
+            const phone = '5521980552608'; // Troque pelo seu número WhatsApp
+            window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+        }
+
+        renderCart();
+    </script>
+</body>
+</html>
